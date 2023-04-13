@@ -101,6 +101,7 @@ if __name__ == '__main__':
             'psutil>=5.4.8',
             'requests>=2.13.0',
             'xlsxwriter>=3.0.5',
+            'pymongo>=4.3.3'
         ],
         extras_require={
             'gui': [

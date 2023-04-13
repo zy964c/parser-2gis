@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 from .writers import CSVWriter, XLSXWriter, FileWriter, JSONWriter
 
 from .exceptions import WriterUnknownFileFormat
+from .writers.mongodb_writer import MongoDbWriter
 
 if TYPE_CHECKING:
     from .options import WriterOptions
@@ -28,5 +29,7 @@ def get_writer(file_path: str, file_format: str, writer_options: WriterOptions) 
         return CSVWriter(file_path, writer_options)
     elif file_format == 'xlsx':
         return XLSXWriter(file_path, writer_options)
+    elif file_format == 'mongo':
+        return MongoDbWriter(file_path, writer_options)
 
     raise WriterUnknownFileFormat('Неизвестный формат файла: %s', file_format)
