@@ -1,7 +1,10 @@
 from __future__ import annotations
 
-import json
+
 from typing import Any
+
+
+from pymongo.errors import DuplicateKeyError
 
 from ...logger import logger
 from .file_writer import FileWriter
@@ -34,10 +37,13 @@ class MongoDbWriter(FileWriter):
                 name = '...'
 
             logger.info('Парсинг [%d] > %s', self._wrote_count + 1, name)
-
-        shop_id = self.collection.insert_one(item).inserted_id
-        self._wrote_count += 1
-        logger.info(f'Inserted {shop_id =}. Number of inserted: {self._wrote_count}')
+        try:
+            shop_id = self.collection.insert_one(item).inserted_id
+        except DuplicateKeyError as e:
+            logger.warning(f'Duplicate found: {e}')
+        else:
+            self._wrote_count += 1
+            logger.info(f'Inserted {shop_id =}. Number of inserted: {self._wrote_count}')
 
     def write(self, catalog_doc: Any) -> None:
         """Write Catalog Item API JSON document down to JSON file.
