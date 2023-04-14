@@ -24,6 +24,10 @@ class CSVOptions(BaseModel):
     join_char: str = '; '
 
 
+class MongoOptions(BaseModel):
+    collection: str = None
+
+
 class WriterOptions(BaseModel):
     """Represent all possible options for File Writer.
 
@@ -34,6 +38,7 @@ class WriterOptions(BaseModel):
     encoding: str = 'utf-8-sig'
     verbose: bool = True
     csv: CSVOptions = CSVOptions()
+    mongo: MongoOptions = MongoOptions()
 
     @validator('encoding')
     def encoding_exists(cls, v: str) -> str:

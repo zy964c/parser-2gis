@@ -15,7 +15,7 @@ class MongoDbWriter(FileWriter):
         self._wrote_count = 0
         self.client = MongoClient('mongodb://db_writer:xYUNmNMpGGCY@10.10.9.104:27017/?tls=false&authMechanism=DEFAULT&authSource=2gis')
         self.db = self.client["2gis"]
-        self.shops = self.db.shops
+        self.collection = getattr(self.db, self._options.mongo.collection)
         return self
 
     def __exit__(self, *exc_info) -> None:
@@ -34,7 +34,7 @@ class MongoDbWriter(FileWriter):
 
             logger.info('Парсинг [%d] > %s', self._wrote_count + 1, name)
 
-        shop_id = self.shops.insert_one(item).inserted_id
+        shop_id = self.collection.insert_one(item).inserted_id
         self._wrote_count += 1
         logger.info(f'Inserted {shop_id =}. Number of inserted: {self._wrote_count}')
 

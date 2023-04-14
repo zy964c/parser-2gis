@@ -14,6 +14,7 @@ from .gui import gui_app
 
 class ArgumentHelpFormatter(argparse.HelpFormatter):
     """Help message formatter which adds default values to argument help."""
+
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self._default_config = Configuration().dict()
@@ -96,39 +97,62 @@ def parse_arguments() -> tuple[argparse.Namespace, Configuration]:
         main_parser_required = True
 
     main_parser = arg_parser.add_argument_group(main_parser_name)
-    main_parser.add_argument('-i', '--url', nargs='+', default=None, required=main_parser_required, help='URL с выдачей')
-    main_parser.add_argument('-o', '--output-path', metavar='PATH', default=None, required=main_parser_required, help='Путь до результирующего файла')
-    main_parser.add_argument('-f', '--format', metavar='{csv,xlsx,json,mongo}', choices=['csv', 'xlsx', 'json', 'mongo'], default=None, required=main_parser_required, help='Формат результирующего файла')
+    main_parser.add_argument('-i', '--url', nargs='+', default=None, required=main_parser_required,
+                             help='URL с выдачей')
+    main_parser.add_argument('-o', '--output-path', metavar='PATH', default=None, required=main_parser_required,
+                             help='Путь до результирующего файла')
+    main_parser.add_argument('-f', '--format', metavar='{csv,xlsx,json,mongo}',
+                             choices=['csv', 'xlsx', 'json', 'mongo'], default=None, required=main_parser_required,
+                             help='Формат результирующего файла')
 
     browser_parser = arg_parser.add_argument_group('Аргументы браузера')
-    browser_parser.add_argument('--chrome.binary_path', metavar='PATH', help='Путь до исполняемого файла браузера. Если не указан, то определяется автоматически')
+    browser_parser.add_argument('--chrome.binary_path', metavar='PATH',
+                                help='Путь до исполняемого файла браузера. Если не указан, то определяется автоматически')
     browser_parser.add_argument('--chrome.disable-images', metavar='{yes,no}', help='Отключить изображения в браузере')
     browser_parser.add_argument('--chrome.headless', metavar='{yes,no}', help='Скрыть браузер')
-    browser_parser.add_argument('--chrome.silent-browser', metavar='{yes,no}', help='Отключить отладочную информацию браузера')
-    browser_parser.add_argument('--chrome.start-maximized', metavar='{yes,no}', help='Запустить окно браузера развёрнутым')
-    browser_parser.add_argument('--chrome.memory-limit', metavar='{4096,5120,...}', help='Лимит оперативной памяти браузера (мегабайт)')
+    browser_parser.add_argument('--chrome.silent-browser', metavar='{yes,no}',
+                                help='Отключить отладочную информацию браузера')
+    browser_parser.add_argument('--chrome.start-maximized', metavar='{yes,no}',
+                                help='Запустить окно браузера развёрнутым')
+    browser_parser.add_argument('--chrome.memory-limit', metavar='{4096,5120,...}',
+                                help='Лимит оперативной памяти браузера (мегабайт)')
 
     csv_parser = arg_parser.add_argument_group('Аргументы CSV/XLSX')
     csv_parser.add_argument('--writer.csv.add-rubrics', metavar='{yes,no}', help='Добавить колонку "Рубрики"')
-    csv_parser.add_argument('--writer.csv.add-comments', metavar='{yes,no}', help='Добавлять комментарии к ячейкам Телефон, E-Mail, и т.д.')
-    csv_parser.add_argument('--writer.csv.columns-per-entity', metavar='{1,2,3,...}', help='Количество колонок для результата с несколькими возможными значениями: Телефон_1, Телефон_2, и т.д.')
-    csv_parser.add_argument('--writer.csv.remove-empty-columns', metavar='{yes,no}', help='Удалить пустые колонки по завершению работы парсера')
-    csv_parser.add_argument('--writer.csv.remove-duplicates', metavar='{yes,no}', help='Удалить повторяющиеся записи по завершению работы парсера')
-    csv_parser.add_argument('--writer.csv.join_char', metavar='{; ,% ,...}', help='Разделитель для комплексных значений ячеек Рубрики, Часы работы')
+    csv_parser.add_argument('--writer.csv.add-comments', metavar='{yes,no}',
+                            help='Добавлять комментарии к ячейкам Телефон, E-Mail, и т.д.')
+    csv_parser.add_argument('--writer.csv.columns-per-entity', metavar='{1,2,3,...}',
+                            help='Количество колонок для результата с несколькими возможными значениями: Телефон_1, Телефон_2, и т.д.')
+    csv_parser.add_argument('--writer.csv.remove-empty-columns', metavar='{yes,no}',
+                            help='Удалить пустые колонки по завершению работы парсера')
+    csv_parser.add_argument('--writer.csv.remove-duplicates', metavar='{yes,no}',
+                            help='Удалить повторяющиеся записи по завершению работы парсера')
+    csv_parser.add_argument('--writer.csv.join_char', metavar='{; ,% ,...}',
+                            help='Разделитель для комплексных значений ячеек Рубрики, Часы работы')
+
+    mongo_parser = arg_parser.add_argument_group('Аргументы mongo')
+    mongo_parser.add_argument('--writer.mongo.collection', help='Имя коллекции в mongodb')
 
     p_parser = arg_parser.add_argument_group('Аргументы парсера')
-    p_parser.add_argument('--parser.use-gc', metavar='{yes,no}', help='Включить сборщик мусора - сдерживает быстрое заполнение RAM, уменьшает скорость парсинга')
-    p_parser.add_argument('--parser.gc-pages-interval', metavar='{5,10,...}', help='Запуск сборщика мусора каждую N-ую страницу результатов (если сборщик включен)')
-    p_parser.add_argument('--parser.max-records', metavar='{1000,2000,...}', help='Максимальное количество спарсенных записей с одного URL')
-    p_parser.add_argument('--parser.skip-404-response', metavar='{yes,no}', help='Пропускать ссылки вернувшие сообщение "Точных совпадений нет / Не найдено"')
-    p_parser.add_argument('--parser.delay_between_clicks', metavar='{0,100,...}', help='Задержка между кликами по записям (миллисекунд)')
+    p_parser.add_argument('--parser.use-gc', metavar='{yes,no}',
+                          help='Включить сборщик мусора - сдерживает быстрое заполнение RAM, уменьшает скорость парсинга')
+    p_parser.add_argument('--parser.gc-pages-interval', metavar='{5,10,...}',
+                          help='Запуск сборщика мусора каждую N-ую страницу результатов (если сборщик включен)')
+    p_parser.add_argument('--parser.max-records', metavar='{1000,2000,...}',
+                          help='Максимальное количество спарсенных записей с одного URL')
+    p_parser.add_argument('--parser.skip-404-response', metavar='{yes,no}',
+                          help='Пропускать ссылки вернувшие сообщение "Точных совпадений нет / Не найдено"')
+    p_parser.add_argument('--parser.delay_between_clicks', metavar='{0,100,...}',
+                          help='Задержка между кликами по записям (миллисекунд)')
 
     other_parser = arg_parser.add_argument_group('Прочие аргументы')
-    other_parser.add_argument('--writer.verbose', metavar='{yes,no}', help='Отображать наименования позиций во время парсинга')
+    other_parser.add_argument('--writer.verbose', metavar='{yes,no}',
+                              help='Отображать наименования позиций во время парсинга')
     other_parser.add_argument('--writer.encoding', metavar='{utf8,1251,...}', help='Кодировка результирующего файла')
 
     rest_parser = arg_parser.add_argument_group('Служебные аргументы')
-    rest_parser.add_argument('-v', '--version', action='version', version=f'%(prog)s {version}', help='Показать версию программы и выйти')
+    rest_parser.add_argument('-v', '--version', action='version', version=f'%(prog)s {version}',
+                             help='Показать версию программы и выйти')
     rest_parser.add_argument('-h', '--help', action='help', help='Показать эту справку и выйти')
 
     args = arg_parser.parse_args()
