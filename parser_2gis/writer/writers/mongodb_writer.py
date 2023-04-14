@@ -25,6 +25,7 @@ class MongoDbWriter(FileWriter):
     def _writedoc(self, catalog_doc: Any) -> None:
         """Write a `catalog_doc` into JSON document."""
         item = catalog_doc['result']['items'][0]
+        item['_id'] = item['id'].split('_')[0]
 
         if self._options.verbose:
             try:
