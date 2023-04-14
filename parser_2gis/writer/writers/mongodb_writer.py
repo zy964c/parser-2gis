@@ -24,8 +24,8 @@ class MongoDbWriter(FileWriter):
 
     def __exit__(self, *exc_info) -> None:
         try:
-            inserted = self.collection.insert_many(self.items.values)
-            self._wrote_count += len(inserted)
+            inserted = self.collection.insert_many(list(self.items.values()))
+            self._wrote_count += len(inserted.inserted_ids)
             logger.info(f'Inserted {inserted}. Number of inserted: {self._wrote_count}')
         except Exception as e:
             logger.warning(f'{e}')
