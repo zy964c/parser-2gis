@@ -1100,6 +1100,7 @@
             "111544",
             "16610",
             "112785",
+            "112803",
             "56161",
             "112582",
             "58618",
@@ -1564,6 +1565,7 @@
             "112778",
             "4532",
             "7690",
+            "112802",
             "7697",
             "18630",
             "112604",
@@ -6370,6 +6372,7 @@
         "children": [
             "360",
             "361",
+            "112801",
             "19290",
             "110370",
             "19288",
@@ -12240,7 +12243,7 @@
     },
     "56581": {
         "isRussian": true,
-        "isNonRussian": false,
+        "isNonRussian": true,
         "label": "Избирательные участки",
         "code": "56581",
         "parentCode": "44",
@@ -12907,7 +12910,7 @@
     },
     "103240": {
         "isRussian": true,
-        "isNonRussian": true,
+        "isNonRussian": false,
         "label": "Услуга распила мяса",
         "code": "103240",
         "parentCode": "70",
@@ -15331,7 +15334,7 @@
     },
     "112614": {
         "isRussian": true,
-        "isNonRussian": false,
+        "isNonRussian": true,
         "label": "Дарксторы",
         "code": "112614",
         "parentCode": "73",
@@ -15879,6 +15882,30 @@
         "label": "Мангалы / Коптильни / Тандыры",
         "code": "112797",
         "parentCode": "93",
+        "children": []
+    },
+    "112801": {
+        "isRussian": true,
+        "isNonRussian": false,
+        "label": "Магазины разливного вина",
+        "code": "112801",
+        "parentCode": "913",
+        "children": []
+    },
+    "112802": {
+        "isRussian": true,
+        "isNonRussian": false,
+        "label": "Резка / ремонт автозеркал",
+        "code": "112802",
+        "parentCode": "77",
+        "children": []
+    },
+    "112803": {
+        "isRussian": true,
+        "isNonRussian": false,
+        "label": "Комнаты матери и ребенка",
+        "code": "112803",
+        "parentCode": "56",
         "children": []
     },
     "-1": {
