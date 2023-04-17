@@ -21,7 +21,7 @@ class Configuration(BaseModel):
     writer: WriterOptions = WriterOptions()
     chrome: ChromeOptions = ChromeOptions()
     parser: ParserOptions = ParserOptions()
-    # path: Optional[pathlib.Path]
+    path: Optional[pathlib.Path]
     version: str = config_version
 
     def __init__(self, *args, **kwargs) -> None:
