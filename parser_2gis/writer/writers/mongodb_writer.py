@@ -12,7 +12,7 @@ from pymongo import MongoClient
 
 
 class MongoDbWriter(FileWriter):
-    """Writer to JSON file."""
+    """Writer to MongoDB."""
     def __enter__(self) -> MongoDbWriter:
         super().__enter__()
         self._wrote_count = 0
@@ -23,13 +23,6 @@ class MongoDbWriter(FileWriter):
         return self
 
     def __exit__(self, *exc_info) -> None:
-        # try:
-        #     inserted = self.collection.insert_many(list(self.items.values()))
-        #     self._wrote_count += len(inserted.inserted_ids)
-        #     logger.info(f'Inserted {inserted}. Number of inserted: {self._wrote_count}')
-        # except Exception as e:
-        #     logger.warning(f'{e}')
-        # finally:
         self.client.close()
         super().__exit__(*exc_info)
 
@@ -37,9 +30,8 @@ class MongoDbWriter(FileWriter):
         """Write a `catalog_doc` into JSON document."""
         item = catalog_doc['result']['items'][0]
         item['_id'] = item['id'].split('_')[0]
-        # if item['_id'] in self.items:
-        #     return
-        # self.items[item['_id']] = item
+        item['created'] = datetime.datetime.utcnow()
+
         if self._options.verbose:
             try:
                 name = item['name_ex']['primary']
@@ -56,7 +48,7 @@ class MongoDbWriter(FileWriter):
             logger.info(f'Inserted {shop_id =}. Number of inserted: {self._wrote_count}')
 
     def write(self, catalog_doc: Any) -> None:
-        """Write Catalog Item API JSON document down to JSON file.
+        """Write Catalog Item API JSON document down to MongoDB.
 
         Args:
             catalog_doc: Catalog Item API JSON document.
